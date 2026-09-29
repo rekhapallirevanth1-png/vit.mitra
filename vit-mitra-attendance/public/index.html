@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vishnu Institute of Technology — MITRA Attendance Management System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+
+  <!-- ===================================================================== -->
+  <!-- FULL-SCREEN EMAIL & PASSWORD LOGIN GATE (SHOWN ON APP LAUNCH)         -->
+  <!-- ===================================================================== -->
+  <section id="auth-gate-screen" class="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-indigo-950 to-violet-950 relative overflow-hidden">
+    <!-- Decorative background glow -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-purple-500/20 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 bg-white rounded-3xl shadow-2xl overflow-hidden border border-white/10 relative z-10">
+      <!-- Left Branding Panel -->
+      <div class="lg:col-span-5 bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 p-8 text-white flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="inline-flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center font-extrabold text-xl border border-white/25 shadow-lg">
+              VIT
+            </div>
+            <div>
+              <span class="px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-widest rounded-full bg-white/20 text-white">
+                Vishnu Institute of Technology
+              </span>
+              <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight mt-0.5">Vishnu Institute of Technology</h1>
+              <p class="text-xs font-bold text-indigo-200">MITRA Club Portal</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-indigo-100 leading-relaxed pt-2">
+            Official Vishnu Institute of Technology — Club Attendance Management & Multi-Horizon Analytics System. Sign in with your Vishnu Email or Reg. No.
+          </p>
+
+          <div class="space-y-2.5 pt-3 text-xs">
+            <div class="p-3 rounded-2xl bg-white/10 border border-white/15">
+              <div class="font-extrabold text-white flex items-center gap-1.5">🛡️ Admin Login Access</div>
+              <p class="text-indigo-100 text-[11px] mt-0.5">Mark attendance for club members, inspect any past date to correct wrong attendance, and review member flags.</p>
+            </div>
+            <div class="p-3 rounded-2xl bg-white/10 border border-white/15">
+              <div class="font-extrabold text-white flex items-center gap-1.5">👁️ User / Member Login Access</div>
+              <p class="text-indigo-100 text-[11px] mt-0.5">Strict View-Only mode. Track Daily, Weekly & Monthly attendance and flag any wrong attendance date.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dataset Login Directory on Left Panel -->
+        <div class="pt-4 border-t border-white/15 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-200">Official Roster (vit.xlsx):</span>
+            <button
+              type="button"
+              onclick="openAddMemberModal()"
+              class="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-white font-extrabold text-[11px] shadow transition flex items-center gap-1 cursor-pointer"
+              title="Add a new member to the official roster"
+            >
+              <span>+ Add Member</span>
+            </button>
+          </div>
+          <input
+            type="text"
+            id="gate-roster-search"
+            oninput="renderGateDatasetLoginList()"
+            placeholder="Search 68 members by name, branch, or reg no..."
+            class="w-full px-3 py-1.5 rounded-lg border border-indigo-400/50 bg-white/10 text-white placeholder-indigo-200 text-xs focus:outline-none focus:ring-1 focus:ring-white"
+          />
+          <div id="gate-dataset-login-list" class="max-h-56 overflow-y-auto space-y-1.5 pr-1 text-xs">
+            <!-- Populated dynamically from vit.xlsx in app.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Email / Reg No & Password Login Form -->
+      <div class="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center bg-white">
+        <div class="max-w-md mx-auto w-full space-y-5">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Sign In to Vishnu Institute of Technology</h2>
+            <p class="text-xs text-slate-500 mt-1">MITRA Club Attendance Portal • Sign in using any account from the official roster in vit.xlsx</p>
+          </div>
+
+          <!-- Role Selector Tabs -->
+          <div class="grid grid-cols-2 gap-2.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+            <button
+              type="button"
+              id="gate-tab-admin"
+              onclick="selectGateRole('admin')"
+              class="py-2.5 px-3 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 bg-indigo-600 text-white shadow-sm"
+            >
+              <span>🛡️ Admin (24PA1A4297)</span>
+            </button>
+            <button
+              type="button"
+              id="gate-tab-user"
+              onclick="selectGateRole('user')"
+              class="py-2.5 px-3 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 text-slate-600 hover:text-slate-900"
+            >
+              <span>👁️ Member Login (vit.xlsx)</span>
+            </button>
+          </div>
+
+          <!-- Error Box -->
+          <div id="gate-error-box" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700"></div>
+
+          <!-- Login Form -->
+          <form onsubmit="submitGateLogin(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5" id="gate-email-label">
+                Admin VIT Email or Reg. No. *
+              </label>
+              <input
+                type="text"
+                id="gate-email-input"
+                required
+                value="24pa1a4297@vishnu.edu.in"
+                placeholder="e.g., 24pa1a4297@vishnu.edu.in or 24PA1A4201 or 24pa1a4218@vishnu.edu.in"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <!-- Single-User Privacy Notice when User Login is active -->
+            <div id="gate-member-picker-wrap" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-950 font-medium">
+              🔒 <strong>Private 1-Person Member View:</strong> Enter your VIT Email (<code class="font-mono font-bold">24pa1a4201@vishnu.edu.in</code>) or VIT Reg. No. (<code class="font-mono font-bold">24PA1A4201</code>). Opens <strong>only your personal attendance record</strong> from the dataset.
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-xs font-bold text-slate-700" id="gate-pass-label">
+                  Password *
+                </label>
+                <div class="flex items-center gap-3">
+                  <button type="button" onclick="openChangePasswordModal()" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 underline flex items-center gap-1 cursor-pointer">
+                    <span>🔑 Change Password</span>
+                  </button>
+                  <button type="button" onclick="toggleGatePasswordVisibility()" class="text-[11px] font-bold text-slate-500 hover:text-slate-800">
+                    Show / Hide
+                  </button>
+                </div>
+              </div>
+              <input
+                type="password"
+                id="gate-password-input"
+                value="123"
+                placeholder="Enter password (e.g. 123 or your updated password)"
+                class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <div class="flex items-center justify-between text-[11px] mt-1">
+                <span id="gate-pass-hint" class="text-emerald-700 font-semibold">
+                  ✓ Default/Any password accepted, or enter your changed password
+                </span>
+                <button type="button" onclick="openChangePasswordModal()" class="font-bold text-indigo-600 hover:text-indigo-800 underline">
+                  Update / Reset 🔑
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="gate-submit-btn"
+              class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm shadow-lg shadow-indigo-200 transition flex items-center justify-center gap-2"
+            >
+              <span>Sign In & Open Vishnu Institute of Technology Portal →</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN APPLICATION DASHBOARD SHELL (UNLOCKED AFTER LOGIN)               -->
+  <!-- ===================================================================== -->
+  <div id="app-dashboard-shell" class="hidden min-h-screen flex flex-col">
+
+  <!-- TOP HEADER & ROLE SWITCHER BAR -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-wrap items-center justify-between py-3 gap-3">
+        <!-- Brand Logo & Title -->
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 flex items-center justify-center text-white font-extrabold text-base shadow-md shadow-indigo-200">
+            VIT
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900">Vishnu Institute of Technology</h1>
+              <span class="px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                MITRA Portal
+              </span>
+            </div>
+            <p class="text-xs text-slate-500">Vishnu Institute of Technology • MITRA Club Member Attendance & Analytics</p>
+          </div>
+        </div>
+
+        <!-- Right Controls: Strict Role Status Pill + Active Profile + Logout Button -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Displayed ONLY when logged in as Admin (24pa1a4297@vishnu.edu.in) -->
+          <div id="admin-mode-badge" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-extrabold shadow-sm">
+            <span>🛡️ Admin (Mark & Correct) • 24PA1A4297</span>
+          </div>
+
+          <!-- Displayed ONLY when a User ID is open (Strictly blocks Admin access) -->
+          <div id="user-mode-badge" class="hidden items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 text-xs font-extrabold">
+            <span>👁️ Member (View-Only) • 🔒 Admin Locked</span>
+          </div>
+
+          <button
+            id="header-add-member-btn"
+            type="button"
+            onclick="openAddMemberModal()"
+            class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer"
+            title="Induct a new club member into the roster"
+          >
+            <span>+ Add Member</span>
+          </button>
+
+          <button
+            id="header-change-pass-btn"
+            type="button"
+            onclick="openChangePasswordModal()"
+            class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex items-center gap-1.5 border border-slate-200 shadow-sm cursor-pointer"
+            title="Change or set your portal password"
+          >
+            <span>🔑 Change Password</span>
+          </button>
+
+          <!-- Current User Badge & Logout Button -->
+          <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+            <div class="text-right hidden sm:block">
+              <div id="header-user-name" class="text-xs font-bold text-slate-800">Admin (24PA1A4297)</div>
+              <div id="header-user-role" class="text-[11px] font-semibold text-emerald-600">Admin • Read & Write Access</div>
+            </div>
+            <button onclick="logoutToAuthGate()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 shadow-sm transition">
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1 overflow-x-auto pt-1 border-t border-slate-100">
+        <button onclick="switchTab('daily')" id="tab-btn-daily" class="nav-tab active px-4 py-2.5 text-xs sm:text-sm rounded-t-lg whitespace-nowrap flex items-center gap-2">
+          <span>📅 Daily Tracker & Marker</span>
+        </button>
+        <button onclick="switchTab('weekly')" id="tab-btn-weekly" class="nav-tab px-4 py-2.5 text-xs sm:text-sm rounded-t-lg whitespace-nowrap flex items-center gap-2 text-slate-600 hover:text-slate-900">
+          <span>📊 Weekly Trackage (7-Day Grid)</span>
+        </button>
+        <button onclick="switchTab('monthly')" id="tab-btn-monthly" class="nav-tab px-4 py-2.5 text-xs sm:text-sm rounded-t-lg whitespace-nowrap flex items-center gap-2 text-slate-600 hover:text-slate-900">
+          <span>📈 Monthly Trackage & Reports</span>
+        </button>
+        <button onclick="switchTab('corrections')" id="tab-btn-corrections" class="nav-tab px-4 py-2.5 text-xs sm:text-sm rounded-t-lg whitespace-nowrap flex items-center gap-2 text-slate-600 hover:text-slate-900">
+          <span>🛠️ Date Corrections & Audit Log</span>
+          <span id="pending-disc-badge" class="px-1.5 py-0.5 text-[10px] font-extrabold rounded-full bg-rose-500 text-white">2</span>
+        </button>
+        <button onclick="switchTab('datasets')" id="tab-btn-datasets" class="nav-tab px-4 py-2.5 text-xs sm:text-sm rounded-t-lg whitespace-nowrap flex items-center gap-2 text-slate-600 hover:text-slate-900">
+          <span>📂 All Dataset Files (CSV / JSON)</span>
+        </button>
+        <button onclick="switchTab('prompt')" id="tab-btn-prompt" class="nav-tab px-4 py-2.5 text-xs sm:text-sm rounded-t-lg whitespace-nowrap flex items-center gap-2 text-slate-600 hover:text-slate-900">
+          <span>✨ AI Builder Prompt</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ROLE PERMISSION STATUS BANNER -->
+  <div id="role-access-banner" class="bg-gradient-to-r from-indigo-900 via-indigo-800 to-violet-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div id="role-banner-text" class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span><strong>ADMIN MODE ACTIVE:</strong> You can mark daily attendance, select any past date to correct wrong attendance, manage members, and approve member correction flags.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="banner-action-btn" onclick="switchTab('corrections')" class="px-2.5 py-1 rounded-md bg-white/15 hover:bg-white/25 text-white font-semibold transition">
+          Correct Past Date Attendance →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- MEMBER PERSONAL SCORECARD (Shown prominently in Member View-Only Mode) -->
+    <section id="member-personal-card" class="hidden bg-white rounded-2xl border border-amber-200 shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-transparent px-6 py-4 border-b border-amber-100 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3.5">
+          <div id="member-card-avatar" class="w-12 h-12 rounded-2xl bg-amber-600 text-white font-extrabold text-base flex items-center justify-center shadow">
+            RV
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded bg-amber-100 text-amber-800 border border-amber-300">
+                👁️ Club Member View-Only Mode
+              </span>
+              <span id="member-card-reg" class="text-xs font-mono font-bold text-slate-600">22BCE1318</span>
+            </div>
+            <h2 id="member-card-name" class="text-lg font-extrabold text-slate-900 mt-0.5">Rohan Verma</h2>
+            <p id="member-card-meta" class="text-xs text-slate-500">Technical Wing • Technical Lead</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="bg-white px-4 py-2 rounded-xl border border-slate-200 text-center min-w-[95px]">
+            <div class="text-[11px] text-slate-500 font-medium">My Attendance</div>
+            <div id="member-card-pct" class="text-xl font-extrabold text-emerald-600">88.5%</div>
+          </div>
+          <div class="bg-white px-4 py-2 rounded-xl border border-slate-200 text-center min-w-[95px]">
+            <div class="text-[11px] text-slate-500 font-medium">Attended / Total</div>
+            <div id="member-card-ratio" class="text-xl font-extrabold text-slate-800">31 / 35</div>
+          </div>
+          <button onclick="openFlagDiscrepancyModal()" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-sm transition flex items-center gap-1.5">
+            <span>🚩 Flag Wrong Attendance on a Date</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: DAILY TRACKER & ATTENDANCE MARKER / DATE CORRECTION          -->
+    <!-- =================================================================== -->
+    <section id="tab-daily" class="space-y-6">
+      <!-- Date Controls & Session Header Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <!-- Date Picker + Day Navigation + Auto Date Controls -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <div class="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
+              <button onclick="stepSelectedDate(-1)" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:shadow-sm transition" title="Previous Day">
+                ◀ Prev Day
+              </button>
+              <input
+                type="date"
+                id="daily-date-picker"
+                onchange="onDailyDateChange(this.value)"
+                class="mx-1 px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs sm:text-sm font-bold text-indigo-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+              <button onclick="stepSelectedDate(1)" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:bg-white hover:shadow-sm transition" title="Next Day">
+                Next Day ▶
+              </button>
+            </div>
+
+            <!-- Auto Date Toggle Button -->
+            <button
+              type="button"
+              id="auto-date-toggle-btn"
+              onclick="toggleAutoDateMode()"
+              class="px-3 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition flex items-center gap-1.5"
+              title="Automatically keep date synchronized to today's live date"
+            >
+              <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+              <span>Auto Date: ON</span>
+            </button>
+
+            <!-- Jump to Today Button -->
+            <button onclick="jumpToToday()" class="px-3 py-2 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition">
+              Jump to Today
+            </button>
+
+            <!-- Live Clock & Auto Sync Badge -->
+            <span id="live-clock-badge" class="px-2.5 py-1.5 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-700 border border-slate-200"></span>
+            <span id="auto-date-status-badge" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold"></span>
+            <span id="daily-date-human" class="text-xs font-semibold text-slate-500 pl-1"></span>
+          </div>
+
+          <!-- Session Topic & Admin Actions -->
+          <div class="flex flex-wrap items-center gap-2">
+            <input
+              type="text"
+              id="session-title-input"
+              placeholder="Session / Event Title (e.g. Weekly GBM)"
+              class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-800 w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <select id="session-type-select" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 bg-white">
+              <option value="General Body Meet">General Body Meet</option>
+              <option value="Outreach Drive">Outreach Drive</option>
+              <option value="Event Prep">Event Prep</option>
+              <option value="Tech Workshop">Tech Workshop</option>
+              <option value="Core Sync">Core Sync</option>
+              <option value="Creative Sync">Creative Sync</option>
+            </select>
+            <button id="add-member-btn" onclick="openAddMemberModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5">
+              <span>+ Add Member</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Retroactive Past-Date Correction Notice Banner (automatically shown when inspecting a past date) -->
+        <div id="past-date-correction-alert" class="hidden mt-4 p-3.5 rounded-xl bg-amber-50 border border-amber-300 correction-banner flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 text-xs text-amber-950">
+            <span class="text-lg">🕰️</span>
+            <div>
+              <strong class="font-extrabold">RETROACTIVE DATE INSPECTION / CORRECTION MODE:</strong>
+              <span id="past-date-alert-msg">You are viewing attendance for a past date. Any changes made by Admin are automatically logged in the Date Correction Audit Trail.</span>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-amber-200/70 text-amber-900 font-bold text-[11px]">
+            Audit Logging Enabled
+          </span>
+        </div>
+      </div>
+
+      <!-- Daily KPI Summary Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div id="kpi-label-1" class="text-xs font-semibold text-slate-500">Total Club Roster</div>
+          <div id="kpi-total" class="text-2xl font-extrabold text-slate-900 mt-1">16</div>
+          <div id="kpi-sub-1" class="text-[11px] text-slate-400 mt-0.5">Active Vishnu Institute of Technology members</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-emerald-200 shadow-sm">
+          <div id="kpi-label-2" class="text-xs font-semibold text-emerald-700">Present Today</div>
+          <div id="kpi-present" class="text-2xl font-extrabold text-emerald-600 mt-1">0</div>
+          <div id="kpi-present-sub" class="text-[11px] text-emerald-600/80 mt-0.5">On time roll call</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-rose-200 shadow-sm">
+          <div id="kpi-label-3" class="text-xs font-semibold text-rose-700">Absent</div>
+          <div id="kpi-absent" class="text-2xl font-extrabold text-rose-600 mt-1">0</div>
+          <div id="kpi-sub-3" class="text-[11px] text-rose-600/80 mt-0.5">Unexcused absence</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-sky-200 shadow-sm">
+          <div id="kpi-label-4" class="text-xs font-semibold text-sky-700">On-Duty (OD) / Late</div>
+          <div id="kpi-od-late" class="text-2xl font-extrabold text-sky-600 mt-1">0</div>
+          <div id="kpi-sub-4" class="text-[11px] text-sky-600/80 mt-0.5">Excused club duty or late</div>
+        </div>
+        <div class="bg-gradient-to-br from-indigo-600 to-violet-700 p-4 rounded-2xl text-white shadow-sm col-span-2 sm:col-span-1">
+          <div id="kpi-label-5" class="text-xs font-semibold text-indigo-100">Daily Attendance %</div>
+          <div id="kpi-rate" class="text-2xl font-extrabold mt-1">0%</div>
+          <div id="kpi-sub-5" class="text-[11px] text-indigo-200 mt-0.5">Present + OD + Late</div>
+        </div>
+      </div>
+
+      <!-- Filter, Search & Bulk Actions Bar -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50/60">
+          <!-- Search & Wing Filter (Visible ONLY to Admin) -->
+          <div id="admin-roster-filter-bar" class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
+            <div class="relative flex-1 max-w-xs">
+              <input
+                type="text"
+                id="member-search-input"
+                oninput="renderDailyRoster()"
+                placeholder="Search Name or VIT Reg No (24PA1A...)"
+                class="w-full pl-3.5 pr-3 py-2 rounded-xl border border-slate-300 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+            <select id="branch-filter-select" onchange="renderDailyRoster()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 bg-white">
+              <option value="ALL">All Branches</option>
+              <option value="AI&DS">AI&DS (21)</option>
+              <option value="AI&ML">AI&ML (18)</option>
+              <option value="CSE">CSE (10)</option>
+              <option value="IT">IT (9)</option>
+              <option value="ECE">ECE (5)</option>
+              <option value="CSBS">CSBS (4)</option>
+              <option value="MECH">MECH (1)</option>
+            </select>
+            <select id="wing-filter-select" onchange="renderDailyRoster()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 bg-white">
+              <option value="ALL">All Wings / Teams</option>
+              <option value="AI & Technical">AI & Technical Wing</option>
+              <option value="Visual Creativity">Visual Creativity & Media</option>
+              <option value="Marketing">Marketing & Outreach</option>
+              <option value="Impact">Impact & Community</option>
+              <option value="General Body">General Body & Core</option>
+            </select>
+            <select id="status-filter-select" onchange="renderDailyRoster()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-700 bg-white">
+              <option value="ALL">All Statuses</option>
+              <option value="present">Present Only</option>
+              <option value="absent">Absent Only</option>
+              <option value="late">Late Only</option>
+              <option value="od">On-Duty (OD) Only</option>
+            </select>
+          </div>
+
+          <!-- Private Single-User Notice (Visible ONLY when a User ID is logged in) -->
+          <div id="user-single-sheet-header" class="hidden items-center gap-2 text-xs font-extrabold text-slate-800">
+            <span>👤 My Personal Attendance Sheet (Other members' attendance is hidden)</span>
+          </div>
+
+          <!-- Bulk Mark Controls (Admin Only) + Export -->
+          <div class="flex flex-wrap items-center gap-2">
+            <div id="admin-bulk-controls" class="flex flex-wrap items-center gap-1.5">
+              <span class="text-[11px] font-bold text-slate-500 mr-1">Bulk Mark Date:</span>
+              <button onclick="bulkMarkDate('present')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition">
+                ✓ All Present
+              </button>
+              <button onclick="bulkMarkDate('od')" class="px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold shadow-sm transition">
+                All OD
+              </button>
+              <button onclick="bulkMarkDate('absent')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition">
+                All Absent
+              </button>
+            </div>
+            <div id="user-readonly-pill" class="hidden items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs font-bold">
+              <span>🔒 Read-Only Mode (Only Admins can mark/edit)</span>
+            </div>
+            <button onclick="exportCurrentDateCSV()" class="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-xs font-bold transition">
+              ⬇ Export CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Daily Member Attendance Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <th class="py-3 px-4">Club Member</th>
+                <th class="py-3 px-3">VIT Reg. No.</th>
+                <th class="py-3 px-3">Wing / Role</th>
+                <th class="py-3 px-3 text-center">Overall %</th>
+                <th class="py-3 px-4 text-center">Mark / View Status (<span id="table-date-label">Today</span>)</th>
+                <th class="py-3 px-4">Remarks / Date Correction Action</th>
+              </tr>
+            </thead>
+            <tbody id="daily-roster-tbody" class="divide-y divide-slate-100 text-xs sm:text-sm">
+              <!-- Populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: WEEKLY TRACKAGE (7-DAY MATRIX & WEEKLY ANALYTICS)            -->
+    <!-- =================================================================== -->
+    <section id="tab-weekly" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Weekly Attendance Trackage (7-Day Matrix)</h2>
+          <p class="text-xs text-slate-500">Day-by-day weekly breakdown across all Vishnu Institute of Technology members. Click any date badge as Admin to jump & correct that date.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="shiftWeek(-1)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition">
+            ◀ Previous Week
+          </button>
+          <span id="weekly-range-label" class="px-3.5 py-1.5 rounded-xl bg-indigo-50 text-indigo-800 border border-indigo-200 text-xs font-extrabold">
+            Current 7-Day Window
+          </span>
+          <button onclick="shiftWeek(1)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition">
+            Next Week ▶
+          </button>
+          <button onclick="resetWeekToCurrent()" class="px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+            This Week
+          </button>
+        </div>
+      </div>
+
+      <!-- Weekly Charts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-slate-800">Weekly Daily Attendance Breakdown</h3>
+            <span class="text-[11px] text-slate-400 font-medium">Present vs Late/OD vs Absent</span>
+          </div>
+          <div class="h-64">
+            <canvas id="weeklyBarChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-bold text-slate-800">Wing-Wise Weekly Attendance Rate (%)</h3>
+            <span class="text-[11px] text-slate-400 font-medium">By Vishnu Institute of Technology Department</span>
+          </div>
+          <div class="h-64">
+            <canvas id="weeklyWingChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly 7-Day Member Matrix Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 bg-slate-50/60">
+          <div class="text-xs font-bold text-slate-700">Member 7-Day Attendance Grid (Click any cell to inspect/correct that date)</div>
+          <div class="flex items-center gap-3 text-[11px] font-semibold">
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span> P = Present</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-sky-500"></span> OD = On-Duty</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-amber-500"></span> L = Late</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-rose-500"></span> A = Absent</span>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead id="weekly-matrix-thead"></thead>
+            <tbody id="weekly-matrix-tbody" class="divide-y divide-slate-100 text-xs"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: MONTHLY TRACKAGE & ELIGIBILITY ANALYTICS                     -->
+    <!-- =================================================================== -->
+    <section id="tab-monthly" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Monthly Attendance Trackage & Club Standing</h2>
+          <p class="text-xs text-slate-500">Comprehensive monthly tally, attendance eligibility standing (75% VIT threshold), and trend analysis.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <label class="text-xs font-bold text-slate-600">Select Month:</label>
+          <select id="monthly-selector" onchange="renderMonthlyView()" class="px-3.5 py-2 rounded-xl border border-slate-300 text-xs font-bold text-indigo-950 bg-white">
+            <!-- Populated dynamically from available months -->
+          </select>
+          <button onclick="exportMonthlyCSV()" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition">
+            ⬇ Export Monthly Report CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- Monthly KPI Row -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="text-xs font-semibold text-slate-500">Club Sessions Conducted</div>
+          <div id="monthly-kpi-sessions" class="text-2xl font-extrabold text-slate-900 mt-1">0</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">In selected month</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-emerald-200 shadow-sm">
+          <div class="text-xs font-semibold text-emerald-700">Monthly Average Rate</div>
+          <div id="monthly-kpi-avg" class="text-2xl font-extrabold text-emerald-600 mt-1">0%</div>
+          <div class="text-[11px] text-emerald-600/80 mt-0.5">Club-wide attendance</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-indigo-200 shadow-sm">
+          <div class="text-xs font-semibold text-indigo-700">Members ≥ 85% (Good Standing)</div>
+          <div id="monthly-kpi-optimal" class="text-2xl font-extrabold text-indigo-600 mt-1">0</div>
+          <div class="text-[11px] text-indigo-600/80 mt-0.5">Eligible for core credits</div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-rose-200 shadow-sm">
+          <div class="text-xs font-semibold text-rose-700">Shortage Alert (&lt; 75%)</div>
+          <div id="monthly-kpi-shortage" class="text-2xl font-extrabold text-rose-600 mt-1">0</div>
+          <div class="text-[11px] text-rose-600/80 mt-0.5">Requires Admin review</div>
+        </div>
+      </div>
+
+      <!-- Monthly Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm lg:col-span-2">
+          <h3 class="text-sm font-bold text-slate-800 mb-3">Daily Club Attendance % Trend Across Month</h3>
+          <div class="h-64">
+            <canvas id="monthlyLineChart"></canvas>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <h3 class="text-sm font-bold text-slate-800 mb-3">Monthly Status Distribution</h3>
+          <div class="h-64 flex items-center justify-center">
+            <canvas id="monthlyDoughnutChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monthly Member Summary Table -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-slate-200 bg-slate-50/60 flex items-center justify-between">
+          <h3 class="text-xs sm:text-sm font-bold text-slate-800">Member-Wise Monthly Attendance Summary</h3>
+          <span class="text-[11px] text-slate-500">Attendance % counts Present, Late, and approved On-Duty (OD)</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <th class="py-3 px-4">Member Name</th>
+                <th class="py-3 px-3">VIT Reg. No.</th>
+                <th class="py-3 px-3">Wing</th>
+                <th class="py-3 px-3 text-center">Sessions</th>
+                <th class="py-3 px-3 text-center text-emerald-700">Present</th>
+                <th class="py-3 px-3 text-center text-sky-700">OD</th>
+                <th class="py-3 px-3 text-center text-amber-700">Late</th>
+                <th class="py-3 px-3 text-center text-rose-700">Absent</th>
+                <th class="py-3 px-4 text-center">Monthly %</th>
+                <th class="py-3 px-4 text-center">Standing</th>
+              </tr>
+            </thead>
+            <tbody id="monthly-summary-tbody" class="divide-y divide-slate-100 text-xs sm:text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: DATE CORRECTIONS & AUDIT CENTER                              -->
+    <!-- =================================================================== -->
+    <section id="tab-corrections" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Column: Direct Admin Date & Member Correction Tool -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+              🛠️
+            </div>
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900">Go Through Date & Correct Attendance</h3>
+              <p class="text-[11px] text-slate-500">Select any date and member to fix wrong attendance</p>
+            </div>
+          </div>
+
+          <div id="correction-form-lock-notice" class="hidden p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900">
+            🔒 <strong>View-Only Mode:</strong> Only Admins can directly overwrite attendance records. As a club member, click <strong>"Flag Wrong Attendance"</strong> below to request a fix!
+            <button onclick="openFlagDiscrepancyModal()" class="mt-2 w-full py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs">
+              🚩 Flag Wrong Attendance for Admin Review
+            </button>
+          </div>
+
+          <form id="direct-correction-form" onsubmit="submitDirectDateCorrection(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">1. Select Date of Wrong Attendance</label>
+              <input
+                type="date"
+                id="corr-date-input"
+                onchange="updateCorrectionFormPreview()"
+                required
+                class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">2. Select Club Member</label>
+              <select
+                id="corr-member-select"
+                onchange="updateCorrectionFormPreview()"
+                required
+                class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-800 bg-white"
+              ></select>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <span class="font-semibold text-slate-600">Recorded Status on Date:</span>
+              <span id="corr-recorded-status-badge" class="px-2.5 py-0.5 rounded-full font-bold uppercase text-[11px] bg-slate-200 text-slate-800">
+                Checking...
+              </span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">3. Correct Attendance Status To</label>
+              <select
+                id="corr-new-status-select"
+                required
+                class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold text-indigo-900 bg-white"
+              >
+                <option value="present">✓ Present (P)</option>
+                <option value="od">🛡️ On-Duty / Excused (OD)</option>
+                <option value="late">⏰ Late (L)</option>
+                <option value="absent">✕ Absent (A)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">4. Correction Reason / Verification Note</label>
+              <textarea
+                id="corr-reason-input"
+                rows="2"
+                placeholder="e.g., Verified physical attendance sheet / DSW OD letter"
+                required
+                class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              ></textarea>
+            </div>
+
+            <div class="flex gap-2 pt-1">
+              <button
+                type="submit"
+                id="corr-submit-btn"
+                class="flex-1 py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition"
+              >
+                ✓ Apply Date Correction
+              </button>
+              <button
+                type="button"
+                onclick="jumpToCorrectionDateInDaily()"
+                class="py-2.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition"
+                title="Open full day sheet for this date"
+              >
+                Open Full Date Sheet
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right 2 Columns: Discrepancy Queue + Audit Log -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Member-Flagged Wrong Attendance Queue -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-slate-200 bg-rose-50/50 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
+                  <span>🚩 Identified Wrong Attendance Requests (Member Flags)</span>
+                </h3>
+                <p class="text-[11px] text-slate-500">When members spot wrong attendance in View-Only mode, their date correction requests appear here for Admin verification.</p>
+              </div>
+              <button onclick="openFlagDiscrepancyModal()" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition">
+                + Flag Wrong Attendance
+              </button>
+            </div>
+            <div id="discrepancy-list-container" class="divide-y divide-slate-100">
+              <!-- Populated by app.js -->
+            </div>
+          </div>
+
+          <!-- Historical Date Correction Audit Log -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 border-b border-slate-200 bg-slate-50/60 flex items-center justify-between">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-900">📜 Date Attendance Correction Audit Log</h3>
+                <p class="text-[11px] text-slate-500">Complete chronological record of every attendance correction made by Admins across dates.</p>
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                    <th class="py-2.5 px-4">Attendance Date</th>
+                    <th class="py-2.5 px-3">Club Member</th>
+                    <th class="py-2.5 px-3 text-center">Status Change</th>
+                    <th class="py-2.5 px-4">Reason / Verification</th>
+                    <th class="py-2.5 px-3">Corrected By</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-log-tbody" class="divide-y divide-slate-100 text-xs"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 5: MASTER AI BUILDER PROMPT (FROM SCREENSHOT REQUEST)           -->
+    <!-- =================================================================== -->
+    <!-- =================================================================== -->
+    <!-- TAB 5: ALL DATASET FILES (CSV & JSON) + LIVE CSV IMPORTER           -->
+    <!-- =================================================================== -->
+    <section id="tab-datasets" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900">📂 All Vishnu Institute of Technology Dataset Files (Live CSV & JSON Repository)</h2>
+            <p class="text-xs text-slate-500">All 6 dataset files are stored in <code class="font-mono text-indigo-600">data/</code> and automatically stay synchronized with every attendance update.</p>
+          </div>
+          <button onclick="loadAndRenderDatasets()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+            🔄 Refresh Dataset Files
+          </button>
+        </div>
+
+        <!-- Grid of 6 Dataset Cards -->
+        <div id="datasets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+          <!-- Populated dynamically by app.js -->
+        </div>
+
+        <!-- Live File Preview Box -->
+        <div class="mt-6 bg-slate-900 rounded-2xl p-4 text-slate-100">
+          <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-700">
+            <span id="dataset-preview-title" class="text-xs font-extrabold text-emerald-400 font-mono">Preview: vit_mitra_2026-09-23.csv</span>
+            <a id="dataset-preview-download-link" href="/api/datasets/download?file=vit_mitra_2026-09-23.csv" class="px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold">
+              ⬇ Download File
+            </a>
+          </div>
+          <pre id="dataset-preview-content" class="text-xs font-mono whitespace-pre overflow-x-auto max-h-64 leading-relaxed text-slate-200"></pre>
+        </div>
+      </div>
+
+      <!-- CSV Dataset Importer Card (Admin) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div>
+          <h3 class="text-base font-extrabold text-slate-900">📤 Import / Paste CSV Dataset into Vishnu Institute of Technology App</h3>
+          <p class="text-xs text-slate-500">Paste any CSV dataset with columns <code class="font-mono text-indigo-600">VIT Reg No,Member Name,Wing,Role,Date,Status,Note</code> to load it into the database.</p>
+        </div>
+        <textarea
+          id="csv-import-textarea"
+          rows="8"
+          class="w-full p-3.5 rounded-xl border border-slate-300 font-mono text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >VIT Reg No,Member Name,Wing,Role,Date,Status,Note
+24PA1A4297,Club Admin (24PA1A4297),Technical,Club Admin & President,2026-09-23,PRESENT,""
+24PA1A4201,Diya Nair,Management & Events,Vice President,2026-09-23,OD,""
+24PA1A4218,Rohan Verma,Technical,Technical Lead,2026-09-23,PRESENT,""
+24PA1A4234,Ananya Krishnan,PR & Outreach,Outreach Secretary,2026-09-23,PRESENT,""
+24PA1A4255,Karthik Reddy,Design & Media,Creative Head,2026-09-23,OD,""
+24PA1A4262,Sneha Iyer,Social Impact,Mitra Drive Coordinator,2026-09-23,LATE,""
+23PA1A0590,Vikramaditya Rao,Management & Events,Logistics Lead,2026-09-23,PRESENT,""
+23PA1A4276,Meera Deshmukh,Technical,Full-Stack Core,2026-09-23,OD,"On-Duty: Club stall / Poster duty"
+24PA1A4223,Aditya Kulkarni,Technical,Executive Member,2026-09-23,OD,""
+24PA1A4277,Priya Menon,Design & Media,UI/UX Designer,2026-09-23,PRESENT,""
+24PA1A4240,Siddharth Joshi,PR & Outreach,Sponsorship Core,2026-09-23,ABSENT,""
+24PA1A4232,Nandini Gupta,Social Impact,Community Volunteer,2026-09-23,ABSENT,""
+24PA1A0498,Harshvardhan Singh,Management & Events,Event Coordinator,2026-09-23,PRESENT,""
+24PA1A1221,Tanvi Chatterjee,PR & Outreach,Editorial & Content,2026-09-23,LATE,""
+24PA1A4289,Pranav Subramanian,Technical,AI/ML Member,2026-09-23,LATE,""
+24PA1A4294,Ishaan Malhotra,Social Impact,Field Outreach Member,2026-09-23,PRESENT,""</textarea>
+        <div class="flex items-center gap-3">
+          <button onclick="submitCSVImport()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition">
+            ✓ Import CSV Dataset into App
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-prompt" class="hidden space-y-4">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="text-lg font-extrabold text-slate-900">✨ Vishnu Institute of Technology Attendance Marker — Structured AI Builder Prompt</h2>
+            <p class="text-xs text-slate-500">As requested in your screenshot ("can you make a prompt on this"), here is the ready-to-copy specification prompt alongside this live working application.</p>
+          </div>
+          <button onclick="copyMasterPrompt()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition">
+            📋 Copy Full Prompt
+          </button>
+        </div>
+        <pre id="master-prompt-box" class="mt-4 p-4 rounded-xl bg-slate-900 text-slate-100 text-xs font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed max-h-[540px]"></pre>
+      </div>
+    </section>
+
+  </main>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: LOGIN & ROLE SWITCHER MODAL                                  -->
+  <!-- ===================================================================== -->
+  <div id="login-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="bg-gradient-to-r from-indigo-600 to-violet-700 px-6 py-5 text-white flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold">Vishnu Institute of Technology — Portal Login</h3>
+          <p class="text-xs text-indigo-100">Choose Admin (Read/Write) or Club Member (View-Only)</p>
+        </div>
+        <button onclick="closeLoginModal()" class="text-white/80 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <div class="p-6 space-y-5">
+        <!-- Role Selection Cards -->
+        <div class="grid grid-cols-2 gap-3">
+          <button type="button" id="modal-role-admin" onclick="selectLoginModalRole('admin')" class="p-3.5 rounded-xl border-2 border-indigo-600 bg-indigo-50/70 text-left transition">
+            <div class="text-base">🛡️</div>
+            <div class="text-xs font-extrabold text-indigo-950 mt-1">Admin Login</div>
+            <div class="text-[11px] text-indigo-700">Mark & correct attendance</div>
+          </button>
+          <button type="button" id="modal-role-user" onclick="selectLoginModalRole('user')" class="p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-300 text-left transition">
+            <div class="text-base">👁️</div>
+            <div class="text-xs font-extrabold text-slate-900 mt-1">Member Login</div>
+            <div class="text-[11px] text-slate-500">View-only + Flag errors</div>
+          </button>
+        </div>
+
+        <form onsubmit="submitLoginModal(event)" class="space-y-3.5">
+          <div id="login-admin-fields" class="space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Admin Email / ID</label>
+              <input type="text" id="login-admin-id" value="admin@vitmitra.ac.in" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Admin Password (Demo: <code class="text-indigo-600">admin123</code>)</label>
+              <input type="password" id="login-admin-pass" value="admin123" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+            </div>
+          </div>
+
+          <div id="login-user-fields" class="hidden space-y-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Select Club Member Profile (VIT Reg. No.)</label>
+              <select id="login-member-select" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold bg-white"></select>
+            </div>
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900">
+              In <strong>Member Login</strong>, all attendance marking controls are strictly disabled (View-Only). You can view Daily, Weekly, and Monthly attendance and flag any wrong attendance date for the Admin.
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition">
+            Sign In to Vishnu Institute of Technology Portal
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: FLAG WRONG ATTENDANCE (FOR MEMBERS OR ADMIN)                 -->
+  <!-- ===================================================================== -->
+  <div id="flag-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4 text-white flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold">🚩 Report Wrong Attendance on a Date</h3>
+          <p class="text-xs text-rose-100">Notify Admin to inspect the date and correct your status</p>
+        </div>
+        <button onclick="closeFlagDiscrepancyModal()" class="text-white/80 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <form onsubmit="submitDiscrepancyFlag(event)" class="p-6 space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Club Member</label>
+          <select id="flag-member-select" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold bg-white"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Date of Wrong Attendance</label>
+          <input type="date" id="flag-date-input" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Correct Status Should Be</label>
+          <select id="flag-status-select" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white">
+            <option value="present">✓ Present (Was present at session)</option>
+            <option value="od">🛡️ On-Duty / OD (Club duty / DSW permission)</option>
+            <option value="late">⏰ Late (Arrived after initial roll call)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Reason / Proof for Admin Verification</label>
+          <textarea id="flag-reason-input" rows="3" required placeholder="Explain why the attendance was marked wrong (e.g., I was at the registration desk in Anna Auditorium)..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeFlagDiscrepancyModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm">Submit Correction Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 3: ADD NEW VIT MITRA CLUB MEMBER (ADMIN ONLY)                   -->
+  <!-- ===================================================================== -->
+  <div id="add-member-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="bg-slate-900 px-6 py-4 text-white flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold">+ Add Vishnu Institute of Technology Club Member</h3>
+          <p class="text-xs text-slate-300">Induct a member into the attendance roster</p>
+        </div>
+        <button onclick="closeAddMemberModal()" class="text-white/80 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <form onsubmit="submitAddMember(event)" class="p-6 space-y-3.5">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Name *</label>
+          <input type="text" id="new-member-name" required placeholder="e.g., Kavya Nair" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">VIT Reg. No. *</label>
+            <input type="text" id="new-member-reg" required placeholder="e.g., 24BCE1755" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold uppercase" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Batch</label>
+            <input type="text" id="new-member-batch" value="2024-28" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Branch *</label>
+            <select id="new-member-branch" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold bg-white">
+              <option value="AI&DS">AI&DS</option>
+              <option value="AI&ML">AI&ML</option>
+              <option value="CSE">CSE</option>
+              <option value="IT">IT</option>
+              <option value="ECE">ECE</option>
+              <option value="CSBS">CSBS</option>
+              <option value="MECH">MECH</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Club Wing / Domain *</label>
+            <select id="new-member-wing" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold bg-white">
+              <option value="AI & Technical Wing">AI & Technical Wing</option>
+              <option value="Visual Creativity & Media Wing">Visual Creativity & Media Wing</option>
+              <option value="Marketing & Outreach Wing">Marketing & Outreach Wing</option>
+              <option value="Impact & Community Wing">Impact & Community Wing</option>
+              <option value="General Body & Core Wing">General Body & Core Wing</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Designation / Role</label>
+            <input type="text" id="new-member-role" value="Executive Member" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">VIT Student Email</label>
+            <input type="email" id="new-member-email" placeholder="e.g. 24pa1a... @vishnu.edu.in" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAddMemberModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm">Add to Roster</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 4: CHANGE / UPDATE PASSWORD (ADMIN & MEMBERS)                   -->
+  <!-- ===================================================================== -->
+  <div id="change-password-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden">
+      <div class="bg-gradient-to-r from-indigo-700 via-purple-700 to-indigo-800 px-6 py-4 text-white flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold flex items-center gap-2">
+            <span>🔑 Change / Set Password</span>
+          </h3>
+          <p class="text-xs text-indigo-100">Set or update your portal sign-in password</p>
+        </div>
+        <button onclick="closeChangePasswordModal()" class="text-white/80 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <form onsubmit="submitChangePassword(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">
+            VIT Reg. No. or Email *
+          </label>
+          <input
+            type="text"
+            id="cp-identifier"
+            required
+            placeholder="e.g. 24PA1A4297 or 24pa1a4507@vishnu.edu.in"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono font-bold text-slate-900 uppercase"
+          />
+          <p class="text-[11px] text-slate-500 mt-1">Enter your student ID or email registered in the roster</p>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold text-slate-700">New Password *</label>
+            <button type="button" onclick="toggleCPPasswordVisibility()" class="text-[11px] font-bold text-indigo-600 hover:text-indigo-800">
+              Show / Hide
+            </button>
+          </div>
+          <input
+            type="password"
+            id="cp-new-password"
+            required
+            placeholder="Enter new password (min. 2 characters)"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-900"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Confirm New Password *</label>
+          <input
+            type="password"
+            id="cp-confirm-password"
+            required
+            placeholder="Re-enter new password"
+            class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold text-slate-900"
+          />
+        </div>
+
+        <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-[11px] text-indigo-900">
+          💡 <strong>Instant Activation:</strong> Once updated, you can immediately log into the portal using this new password across all devices.
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeChangePasswordModal()" class="px-4 py-2 rounded-xl border border-slate-300 text-xs font-bold text-slate-600">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-sm transition">
+            Save New Password
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vishnu Institute of Technology — MITRA Attendance Portal Documentation</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 18mm 16mm;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.55;
+      font-size: 13px;
+      margin: 0;
+      padding: 0;
+    }
+    .cover {
+      border-bottom: 3px solid #4f46e5;
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-weight: 700;
+      font-size: 11px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border: 1px solid #c7d2fe;
+    }
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 12px 0 6px 0;
+      line-height: 1.25;
+    }
+    .subtitle {
+      font-size: 15px;
+      color: #475569;
+      font-weight: 500;
+      margin: 0 0 16px 0;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+      background: #f8fafc;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    .meta-item strong {
+      display: block;
+      font-size: 10px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .meta-item span {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0f172a;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 6px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+    p {
+      margin: 0 0 10px 0;
+      color: #334155;
+    }
+    ul, ol {
+      margin: 0 0 12px 0;
+      padding-left: 20px;
+      color: #334155;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px 0;
+      font-size: 11.5px;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 7px 10px;
+      text-align: left;
+    }
+    th {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      background: #f1f5f9;
+      color: #4338ca;
+      padding: 1.5px 5px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      border: 1px solid #e2e8f0;
+    }
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-family: Consolas, "Courier New", monospace;
+      overflow-x: auto;
+      margin: 10px 0 16px 0;
+      line-height: 1.45;
+      page-break-inside: avoid;
+    }
+    .callout {
+      background: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      font-size: 12px;
+      page-break-inside: avoid;
+    }
+    .callout.amber {
+      background: #fffbeb;
+      border-left-color: #d97706;
+    }
+    .callout.indigo {
+      background: #eef2ff;
+      border-left-color: #4f46e5;
+    }
+    .footer {
+      margin-top: 36px;
+      padding-top: 14px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 10px;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cover Header -->
+  <div class="cover">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span class="badge">Official Technical &amp; Operational Documentation</span>
+      <span style="font-size: 11px; font-weight: 600; color: #64748b;">Vishnu Institute of Technology</span>
+    </div>
+    <h1>Vishnu Institute of Technology</h1>
+    <div class="subtitle">MITRA Club Attendance Management &amp; Multi-Horizon Analytics System</div>
+    
+    <div class="meta-grid">
+      <div class="meta-item">
+        <strong>Institution</strong>
+        <span>Vishnu Inst. of Tech</span>
+      </div>
+      <div class="meta-item">
+        <strong>Roll Number Scheme</strong>
+        <span>JNTUK (24PA1A...)</span>
+      </div>
+      <div class="meta-item">
+        <strong>Domain</strong>
+        <span>@vishnu.edu.in</span>
+      </div>
+      <div class="meta-item">
+        <strong>Master Roster</strong>
+        <span>68 Enrolled Members</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 1 -->
+  <h2>1. Executive Summary &amp; Overview</h2>
+  <p>The <strong>Vishnu Institute of Technology — MITRA Attendance Management System</strong> is a full-stack, role-based application engineered to manage, track, verify, and correct student attendance for the <strong>MITRA Club</strong>. The system provides multi-horizon analytics across Daily, Weekly, and Monthly cycles, with immutable audit logging and discrepancy resolution.</p>
+
+  <div class="callout indigo">
+    <strong>Key Architectural Highlights:</strong>
+    <ul>
+      <li><strong>Dual-Mode Deployment:</strong> Can run as a full-stack REST service (<code>node server.js</code> on port 3000) or as a zero-dependency, self-contained standalone offline file (<code>dist/index.html</code>).</li>
+      <li><strong>Strict Role-Based Access Control (RBAC):</strong> Separates the Admin (<code>24PA1A4297</code> / R Revanth) with full Mark, Correct, and Audit powers from Club Members who have strict 1-Person View-Only access.</li>
+      <li><strong>Master Excel Dataset (<code>vit.xlsx</code>):</strong> Incorporates all 68 officially enrolled students across 7 academic branches (<code>AI&amp;DS</code>, <code>AI&amp;ML</code>, <code>CSE</code>, <code>IT</code>, <code>ECE</code>, <code>CSBS</code>, <code>MECH</code>) and 5 club wings.</li>
+    </ul>
+  </div>
+
+  <!-- Section 2 -->
+  <h2>2. System Architecture &amp; File Structure</h2>
+  <pre>
+vit-mitra-attendance/
+├── server.js                          # Node.js HTTP Server &amp; REST API Router (port 3000)
+├── build.js                           # Standalone production compiler
+├── parse_xlsx.py                      # Python Excel ingest &amp; validation utility
+├── MASTER_PROMPT.md                   # Full AI Builder Specification
+├── DOCUMENTATION.md                   # Markdown Documentation
+├── vit.xlsx                           # Official 68-member master Excel roster
+├── data/
+│   ├── db.json                        # Primary JSON database (members, attendance, logs, passwords)
+│   ├── vit_mitra_members_roster.csv   # Club members directory export
+│   ├── vit_mitra_weekly_report.csv    # 7-day matrix attendance export
+│   ├── vit_mitra_monthly_summary.csv  # Monthly aggregated attendance stats export
+│   └── vit_mitra_full_attendance_history.csv # Comprehensive historical records
+├── dist/                              # Standalone production distribution
+│   ├── index.html                     # Self-contained bundle (opens offline in any browser)
+│   └── data/                          # 7 bundled dataset files for distribution
+└── public/
+    ├── index.html                     # Frontend dashboard markup with Tailwind CSS
+    ├── app.js                         # Frontend controller, state engine &amp; Chart.js logic
+    └── styles.css                     # Custom styles, transitions, and status colors</pre>
+
+  <!-- Section 3 -->
+  <h2>3. User Roles &amp; Permissions Matrix</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Capability / Screen</th>
+        <th>Admin (24PA1A4297 / R Revanth)</th>
+        <th>Club Member (All Other Students)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Roster Visibility</strong></td>
+        <td><strong>Full Roster:</strong> Views all 68+ members</td>
+        <td><strong>Private View:</strong> Only their own record</td>
+      </tr>
+      <tr>
+        <td><strong>Daily Attendance Marking</strong></td>
+        <td><strong>Yes:</strong> Mark Present, Absent, Late, OD</td>
+        <td><strong>No:</strong> View-Only badge; buttons locked</td>
+      </tr>
+      <tr>
+        <td><strong>Bulk Marking Controls</strong></td>
+        <td><strong>Yes:</strong> Mark All Present, Wing Filter</td>
+        <td><strong>No:</strong> Controls hidden</td>
+      </tr>
+      <tr>
+        <td><strong>Past-Date Inspection</strong></td>
+        <td><strong>Yes:</strong> Full club history across any date</td>
+        <td><strong>Yes:</strong> Personal past attendance only</td>
+      </tr>
+      <tr>
+        <td><strong>Retroactive Date Correction</strong></td>
+        <td><strong>Yes:</strong> Modifies status; logged to audit log</td>
+        <td><strong>No:</strong> Locked</td>
+      </tr>
+      <tr>
+        <td><strong>Flag Wrong Attendance Date</strong></td>
+        <td><strong>Yes:</strong> Direct edit or flag</td>
+        <td><strong>Yes:</strong> Submits request to Admin queue</td>
+      </tr>
+      <tr>
+        <td><strong>Discrepancy Review Queue</strong></td>
+        <td><strong>Yes:</strong> 1-click Approve &amp; Correct / Dismiss</td>
+        <td><strong>No:</strong> Hidden</td>
+      </tr>
+      <tr>
+        <td><strong>Audit Log Viewing</strong></td>
+        <td><strong>Yes:</strong> Complete chronological trail</td>
+        <td><strong>No:</strong> Hidden</td>
+      </tr>
+      <tr>
+        <td><strong>+ Add Member</strong></td>
+        <td><strong>Yes:</strong> Available on gate, header, tracker</td>
+        <td><strong>Yes:</strong> Roster expansion allowed</td>
+      </tr>
+      <tr>
+        <td><strong>🔑 Change Password</strong></td>
+        <td><strong>Yes:</strong> Can update anytime</td>
+        <td><strong>Yes:</strong> Can update anytime</td>
+      </tr>
+      <tr>
+        <td><strong>Reports / CSV Download</strong></td>
+        <td><strong>Yes:</strong> Full club Daily &amp; Monthly CSVs</td>
+        <td><strong>Yes:</strong> Personal scorecard export</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Section 4 -->
+  <h2>4. Core Features &amp; Functional Workflows</h2>
+
+  <h3>4.1. Auto Date Change &amp; Live Digital Clock</h3>
+  <p>The system evaluates <code>new Date()</code> upon application boot, setting the active tracking date automatically to <strong>today's live date</strong>. A real-time digital clock displays Indian Standard Time (IST). At midnight (<code>00:00:00</code>), an auto-rollover watcher switches the active session to the new calendar day without requiring manual reloads.</p>
+
+  <h3>4.2. Multi-Horizon Attendance Tracking</h3>
+  <ul>
+    <li><strong>Daily Tracker (Tab 1):</strong> Real-time roll call with color-coded status badges: Present (Emerald), Absent (Rose), Late (Amber), and On-Duty / OD (Sky Blue). Includes session title, session type selector, and retroactive date notice.</li>
+    <li><strong>Weekly Trackage Grid (Tab 2):</strong> 7-day rolling matrix showing member rows against date columns. Includes navigation buttons (Previous Week, Next Week, This Week) and two Chart.js visual analytics: Daily Attendance Breakdown (bar chart) and Wing-wise Attendance Rate (bar chart).</li>
+    <li><strong>Monthly Summary Scorecard (Tab 3):</strong> Comprehensive monthly performance table calculating Sessions Conducted, Present, OD, Late, Absent, and Attendance %. Automatically applies eligibility standing badges:
+      <ul>
+        <li>🟢 <strong>Good Standing:</strong> Attendance &ge; 85%</li>
+        <li>🟡 <strong>Warning:</strong> Attendance 75% &ndash; 84%</li>
+        <li>🔴 <strong>Low Attendance / Ineligible:</strong> Attendance &lt; 75%</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.3. Retroactive Date Correction &amp; Immutable Audit Trail</h3>
+  <p>Admin can select any past date using the date picker to inspect historical records. When an entry is corrected, an immutable audit record is created in <code>db.auditLogs</code> storing: Date, Student Name, Reg No, Old Status, New Status, Justification/Reason, Admin Name, and Timestamp.</p>
+
+  <h3>4.4. Discrepancy Reporting &amp; Review Queue</h3>
+  <p>If a student was incorrectly marked absent, they can open <strong>🚩 Flag Wrong Attendance</strong>, select the date, specify the correct status, and submit a reason. The request arrives in the Admin's Discrepancy Queue, where the Admin can approve and automatically correct the date record with a single click.</p>
+
+  <h3>4.5. "+ Add Member" Feature</h3>
+  <p>Accessible from the Login Gate, the App Header, and the Daily Tracker. Captures Full Name, Vishnu Reg. No., Branch, Wing, Batch, Role, and Email. Automatically populates attendance records for the new student across <strong>all session dates</strong> in <code>db.attendance</code> so the student immediately appears in all historical and current reports.</p>
+
+  <h3>4.6. Flexible Password Management</h3>
+  <p>Admin and Members can sign in using default password <code>123</code> or any arbitrary password. Clicking <strong>🔑 Change Password</strong> opens a modal to set a personal password, which is immediately stored in <code>db.passwords</code> and verified on subsequent sign-ins.</p>
+
+  <!-- Section 5 -->
+  <h2>5. Dataset Catalog</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Dataset File</th>
+        <th>Format</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>vit.xlsx</code></td>
+        <td>Excel (.xlsx)</td>
+        <td>Official master 68-member roster from Vishnu Institute of Technology with Branch, Team, Regd No, and Student Name.</td>
+      </tr>
+      <tr>
+        <td><code>db.json</code></td>
+        <td>JSON</td>
+        <td>Primary operational database storing members, sessions, attendance, discrepancies, audit logs, and passwords.</td>
+      </tr>
+      <tr>
+        <td><code>vit_mitra_members_roster.csv</code></td>
+        <td>CSV</td>
+        <td>Export of all enrolled club members with academic and club designations.</td>
+      </tr>
+      <tr>
+        <td><code>vit_mitra_2026-09-23.csv</code></td>
+        <td>CSV</td>
+        <td>Daily attendance snapshot for testing and verification.</td>
+      </tr>
+      <tr>
+        <td><code>vit_mitra_weekly_report.csv</code></td>
+        <td>CSV</td>
+        <td>7-day matrix tracking each student across the week.</td>
+      </tr>
+      <tr>
+        <td><code>vit_mitra_monthly_summary.csv</code></td>
+        <td>CSV</td>
+        <td>Aggregated monthly statistics and attendance percentages.</td>
+      </tr>
+      <tr>
+        <td><code>vit_mitra_full_attendance_history.csv</code></td>
+        <td>CSV</td>
+        <td>Full transaction history of all attendance marks and retroactive edits.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Section 6 -->
+  <h2>6. REST API Reference</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Method &amp; Endpoint</th>
+        <th>Payload Parameters</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>GET /api/bootstrap</code></td>
+        <td>None</td>
+        <td>Returns full application state (members, sessions, attendance, discrepancies, logs).</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/auth/login</code></td>
+        <td><code>{ role, identifier, password }</code></td>
+        <td>Authenticates Admin (24PA1A4297) or Club Member with password verification.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/auth/change-password</code></td>
+        <td><code>{ identifier, newPassword, confirmPassword }</code></td>
+        <td>Updates personal portal password in database.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/attendance/mark</code></td>
+        <td><code>{ date, memberId, status, note, isCorrection, reason }</code></td>
+        <td>Marks or retroactively corrects single member attendance.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/attendance/bulk</code></td>
+        <td><code>{ date, status, memberIds, sessionTitle, sessionType }</code></td>
+        <td>Bulk marks attendance for all or filtered members on a date.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/members</code></td>
+        <td><code>{ name, regNo, branch, wing, role, batch, email }</code></td>
+        <td>Inducts a new member into the roster and attendance matrix across all dates.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/discrepancies</code></td>
+        <td><code>{ date, memberId, requestedStatus, reason }</code></td>
+        <td>Submits a member's wrong attendance correction request.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/discrepancies/resolve</code></td>
+        <td><code>{ id, action: 'approve' | 'reject', adminNote }</code></td>
+        <td>Admin resolves discrepancy request and applies correction.</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/datasets</code></td>
+        <td>None</td>
+        <td>Lists all dataset files with size, row count, and previews.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Section 7 -->
+  <h2>7. Quick Login Credentials Reference</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Email / Reg. No.</th>
+        <th>Password</th>
+        <th>Access Level</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Admin</strong></td>
+        <td><code>24pa1a4297@vishnu.edu.in</code> or <code>24PA1A4297</code> (R Revanth)</td>
+        <td>Any password or default <code>123</code> (or custom password)</td>
+        <td>Full Read/Write, Mark &amp; Correct, Audit, Discrepancies</td>
+      </tr>
+      <tr>
+        <td><strong>Club Member</strong></td>
+        <td>Any Vishnu roll number from <code>vit.xlsx</code> (e.g. <code>24PA1A4507</code> / A Lokesh)</td>
+        <td>Any password or default <code>123</code> (or custom password)</td>
+        <td>Strict 1-Person View-Only with Discrepancy Flagging</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <span>Vishnu Institute of Technology &bull; MITRA Club Attendance Portal</span>
+    <span>Generated Documentation &bull; Official Release</span>
+  </div>
+
+</body>
+</html>

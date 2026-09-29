@@ -1,0 +1,21 @@
+{
+  "name": "vit-mitra-attendance",
+  "version": "1.0.0",
+  "description": "Vishnu Institute of Technology — MITRA Attendance Management System with Admin & Member RBAC, Retroactive Date Corrections, and Daily/Weekly/Monthly Analytics",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node build.js"
+  },
+  "keywords": [
+    "vit-mitra",
+    "attendance-tracker",
+    "rbac",
+    "club-management",
+    "analytics",
+    "vercel"
+  ],
+  "author": "Vishnu Institute of Technology Technical Team",
+  "license": "MIT"
+}
